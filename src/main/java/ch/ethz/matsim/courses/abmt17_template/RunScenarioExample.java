@@ -1,12 +1,20 @@
 package ch.ethz.matsim.courses.abmt17_template;
 
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.population.Activity;
+import org.matsim.api.core.v01.population.Leg;
+import org.matsim.api.core.v01.population.Person;
+import org.matsim.api.core.v01.population.Plan;
+import org.matsim.api.core.v01.population.PlanElement;
+import org.matsim.api.core.v01.population.Population;
 import org.matsim.contrib.dvrp.run.DvrpConfigGroup;
 import org.matsim.contrib.dvrp.trafficmonitoring.DvrpTravelTimeModule;
 import org.matsim.contrib.dynagent.run.DynQSimModule;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
+import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
+import org.matsim.core.population.io.PopulationWriter;
 import org.matsim.core.scenario.ScenarioUtils;
 
 import abmt17.pt.ABMTPTModule;
@@ -35,10 +43,14 @@ import ch.ethz.matsim.baseline_scenario.analysis.simulation.ModeShareListenerMod
 public class RunScenarioExample {
 	static public void main(String[] args) {
 		// Load the config file (command line argument)
-		Config config = ConfigUtils.loadConfig(args[0], new DvrpConfigGroup(), new AVConfigGroup());
+		Config config = ConfigUtils.loadConfig("/home/floriafa/ABMinputdata3/scenario/abmt_config.xml", new DvrpConfigGroup(), new AVConfigGroup());
+		config.controler().setLastIteration(10);
+		config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
+		config.controler().setWriteEventsInterval(10);
 
 		Scenario scenario = ScenarioUtils.loadScenario(config); // Load scenario
 		Controler controler = new Controler(scenario); // Set up simulation controller
+		
 
 		// Some additional modules to create a more realistic simulation
 		controler.addOverridingModule(new ABMTScoringModule()); // Required if scoring of activities is used
@@ -54,5 +66,8 @@ public class RunScenarioExample {
 		controler.addOverridingModule(new AVScoringModuleForABMT());
 
 		controler.run();
+		
 	}
+	
 }
+
