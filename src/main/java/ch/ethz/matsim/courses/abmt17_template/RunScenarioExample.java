@@ -43,31 +43,37 @@ import ch.ethz.matsim.baseline_scenario.analysis.simulation.ModeShareListenerMod
 public class RunScenarioExample {
 	static public void main(String[] args) {
 		// Load the config file (command line argument)
-		Config config = ConfigUtils.loadConfig("/home/floriafa/ABMinputdata3/scenario/abmt_config.xml", new DvrpConfigGroup(), new AVConfigGroup());
-		config.controler().setLastIteration(10);
-		config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
-		config.controler().setWriteEventsInterval(10);
+		int avFleet = 10;
+		String polyboxDirectory = "/home/floriafa/ABMT_project/";
+		while(avFleet < 21) {
+			Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
+			config.controler().setLastIteration(2);
+			config.controler().setOutputDirectory(polyboxDirectory + "output/" + avFleet + "/");
+			config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
+			config.controler().setWriteEventsInterval(2);
 
-		Scenario scenario = ScenarioUtils.loadScenario(config); // Load scenario
-		Controler controler = new Controler(scenario); // Set up simulation controller
-		
+			Scenario scenario = ScenarioUtils.loadScenario(config); // Load scenario
+			Controler controler = new Controler(scenario); // Set up simulation controller
 
-		// Some additional modules to create a more realistic simulation
-		controler.addOverridingModule(new ABMTScoringModule()); // Required if scoring of activities is used
-		controler.addOverridingModule(new ABMTPTModule()); // More realistic "teleportation" of public transport trips
-		controler.addOverridingModule(new ModeShareListenerModule()); // Writes correct mode shares in every iteration
 
-		// Additional modules for AVs
-		controler.addOverridingModule(new DvrpTravelTimeModule());
-		controler.addOverridingModule(new DynQSimModule<>(AVQSimProvider.class));
-		controler.addOverridingModule(new AVModule());
+			// Some additional modules to create a more realistic simulation
+			controler.addOverridingModule(new ABMTScoringModule()); // Required if scoring of activities is used
+			controler.addOverridingModule(new ABMTPTModule()); // More realistic "teleportation" of public transport trips
+			controler.addOverridingModule(new ModeShareListenerModule()); // Writes correct mode shares in every iteration
 
-		// Fix scoring after AVs have been added to the scenario
-		controler.addOverridingModule(new AVScoringModuleForABMT());
+			// Additional modules for AVs
+			controler.addOverridingModule(new DvrpTravelTimeModule());
+			controler.addOverridingModule(new DynQSimModule<>(AVQSimProvider.class));
+			controler.addOverridingModule(new AVModule());
 
-		controler.run();
-		
+			// Fix scoring after AVs have been added to the scenario
+			controler.addOverridingModule(new AVScoringModuleForABMT());
+
+			controler.run();
+			
+			avFleet = avFleet + 10;
+		}
 	}
-	
+
 }
 
