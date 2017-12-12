@@ -16,7 +16,7 @@ public class ChangePopulation {
 	Random rndOwn = new Random();
 	int selLen = 100000;
 
-	public void ChangePop ( Scenario scenario, double carOwnership ) {
+	public Population ChangePop ( Scenario scenario, double carOwnership ) {
 		Population population = scenario.getPopulation();
 		// Population populationChange = scenario.getPopulation();
 		// carOwnership = this.carOwnership;
@@ -82,7 +82,8 @@ public class ChangePopulation {
 		} // % For person
 
 		PopulationWriter pw = new PopulationWriter (population);
-		pw.write("/home/floriafa/ABMT_project/output/pop.txt");
+		pw.write("/home/floriafa/ABMT_project/output/pop"+carOwnership+"car.txt");
+		return population;
 	}	// % Method
 
 } // % Class
