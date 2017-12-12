@@ -79,7 +79,7 @@ public class ChangePopulation {
 			} // % For plan
 
 		} // % For person
-
+ 
 		PopulationWriter pw = new PopulationWriter (population);
 		pw.write("/home/floriafa/output/pop.txt");
 	}	// % Method
