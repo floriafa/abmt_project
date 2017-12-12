@@ -14,7 +14,9 @@ import org.matsim.core.population.io.PopulationWriter;
 public class ChangePopulation {
 	Random rnd = new Random();
 	Random rndOwn = new Random();
+	Random rndAV = new Random();
 	int selLen = 100000;
+	private double origCO = 50; // We assume an original car ownership of 50
 
 	public Population ChangePop ( Scenario scenario, double carOwnership ) {
 		Population population = scenario.getPopulation();
@@ -26,17 +28,27 @@ public class ChangePopulation {
 			if (person.getAttributes().getAttribute("carAvail")=="never")
 			{person.getAttributes().putAttribute("carOwn", false);}
 			else if (person.getAttributes().getAttribute("carAvail")=="always")
-			{person.getAttributes().putAttribute("carOwn", true);}
+			{person.getAttributes().putAttribute("carOwn", "true");}
 			else 
 			{ // sometimes available
 				int selOwn = rndOwn.nextInt(selLen);
 				double decOwn = selOwn/selLen;
 				if (decOwn < 0.5) 	{person.getAttributes().putAttribute("carOwn", "true");}
-				else 			{person.getAttributes().putAttribute("carOwn", "false");}
+				else 			{person.getAttributes().putAttribute("carOwn", "false");}}
+
+			// Now for those who still own a car, we alter their car ownership.
+			if (person.getAttributes().getAttribute("carOwn")=="true")
+			{
+				double carToAV = origCO  - carOwnership; // here 50 is the assumed original condition
+				int selAV = rndAV.nextInt(selLen);
+				double decAV = selAV/selLen;
+				if (decAV < carToAV/origCO) {
+					person.getAttributes().putAttribute("carOwn","true");
+				}
 			}
 
+			// now based on their ownership, we set the mode choice
 
-			// 			if (person.getAttributes().getAttribute("carOwn")=="false") { // need to check this.
 			Plan plan = person.getSelectedPlan();
 			for( PlanElement pe : plan.getPlanElements()) {
 				if( pe instanceof Activity) {
