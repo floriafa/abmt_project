@@ -45,7 +45,7 @@ public class RunScenarioExample {
 		// Load the config file (command line argument)
 		int avFleet = 10;
 		String polyboxDirectory = "/home/floriafa/ABMT_project/";
-		while(avFleet < 21) {
+		while(avFleet < 210) {
 			Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
 			config.controler().setLastIteration(2);
 			config.controler().setOutputDirectory(polyboxDirectory + "output/" + avFleet + "/");

@@ -15,6 +15,7 @@ public class ChangePopulation {
 	Random rnd = new Random();
 	Random rndOwn = new Random();
 	int selLen = 100000;
+
 	public void ChangePop ( Scenario scenario, double carOwnership ) {
 		Population population = scenario.getPopulation();
 		// Population populationChange = scenario.getPopulation();
@@ -79,7 +80,7 @@ public class ChangePopulation {
 			} // % For plan
 
 		} // % For person
- 
+
 		PopulationWriter pw = new PopulationWriter (population);
 		pw.write("/home/floriafa/output/pop.txt");
 	}	// % Method
