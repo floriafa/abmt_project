@@ -43,35 +43,46 @@ import ch.ethz.matsim.baseline_scenario.analysis.simulation.ModeShareListenerMod
 public class RunScenarioExample {
 	static public void main(String[] args) {
 		// Load the config file (command line argument)
-		int avFleet = 10;
 		String polyboxDirectory = "/home/floriafa/ABMT_project/";
-		while(avFleet < 210) {
-			Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
-			config.controler().setLastIteration(2);
-			config.controler().setOutputDirectory(polyboxDirectory + "output/" + avFleet + "/");
-			config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
-			config.controler().setWriteEventsInterval(2);
+		int avFleet;
+		double carOwnership = 10;
 
-			Scenario scenario = ScenarioUtils.loadScenario(config); // Load scenario
-			Controler controler = new Controler(scenario); // Set up simulation controller
-
-
-			// Some additional modules to create a more realistic simulation
-			controler.addOverridingModule(new ABMTScoringModule()); // Required if scoring of activities is used
-			controler.addOverridingModule(new ABMTPTModule()); // More realistic "teleportation" of public transport trips
-			controler.addOverridingModule(new ModeShareListenerModule()); // Writes correct mode shares in every iteration
-
-			// Additional modules for AVs
-			controler.addOverridingModule(new DvrpTravelTimeModule());
-			controler.addOverridingModule(new DynQSimModule<>(AVQSimProvider.class));
-			controler.addOverridingModule(new AVModule());
-
-			// Fix scoring after AVs have been added to the scenario
-			controler.addOverridingModule(new AVScoringModuleForABMT());
-
-			controler.run();
+		while(carOwnership > -1) {
 			
-			avFleet = avFleet + 10;
+			avFleet = 10;
+
+			while(avFleet < 21) {
+				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
+				config.controler().setLastIteration(1);
+				config.controler().setOutputDirectory(polyboxDirectory + "output/" + avFleet + "/" + carOwnership + "/");
+				config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
+				config.controler().setWriteEventsInterval(1);
+
+				Scenario scenario = ScenarioUtils.loadScenario(config);
+				// Load scenario
+				Controler controler = new Controler(scenario); // Set up simulation controller
+				
+				//Change population here
+				
+
+				// Some additional modules to create a more realistic simulation
+				controler.addOverridingModule(new ABMTScoringModule()); // Required if scoring of activities is used
+				controler.addOverridingModule(new ABMTPTModule()); // More realistic "teleportation" of public transport trips
+				controler.addOverridingModule(new ModeShareListenerModule()); // Writes correct mode shares in every iteration
+
+				// Additional modules for AVs
+				controler.addOverridingModule(new DvrpTravelTimeModule());
+				controler.addOverridingModule(new DynQSimModule<>(AVQSimProvider.class));
+				controler.addOverridingModule(new AVModule());
+
+				// Fix scoring after AVs have been added to the scenario
+				controler.addOverridingModule(new AVScoringModuleForABMT());
+
+				controler.run();
+
+				avFleet = avFleet + 10;
+			}
+			carOwnership = carOwnership - 10;
 		}
 	}
 
