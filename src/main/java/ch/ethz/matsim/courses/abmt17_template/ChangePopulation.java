@@ -66,7 +66,7 @@ public class ChangePopulation {
 						int sel = rnd.nextInt(selLen);
 						double dec = sel/selLen;
 						if (dec < 0.63) { leg.setMode("av");}
-						else if (dec <0.98) {leg.setMode("pt");}
+						else if (dec < 0.98) {leg.setMode("pt");}
 						else {leg.setMode("bike");}
 						// Assume those owning car will remain unchanged
 						// Assign rand() to each person and set Mode according to the rand value
@@ -82,7 +82,7 @@ public class ChangePopulation {
 		} // % For person
 
 		PopulationWriter pw = new PopulationWriter (population);
-		pw.write("/home/floriafa/output/pop.txt");
+		pw.write("/home/floriafa/ABMT_project/output/pop.txt");
 	}	// % Method
 
 } // % Class
