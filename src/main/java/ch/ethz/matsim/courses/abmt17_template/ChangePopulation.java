@@ -75,7 +75,7 @@ public class ChangePopulation {
 					}
 
 				}
-				// Do we compile the activities and legs again into pe ?
+				// Do we compile the activities and legs again into pe?
 			} // % For plan
 
 		} // % For person
