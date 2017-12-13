@@ -12,11 +12,11 @@ import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.population.io.PopulationWriter;
 
 public class ChangePopulation {
-	Random rnd = new Random();
-	Random rndOwn = new Random();
-	int selLen = 100000;
+	static Random rnd = new Random();
+	static Random rndOwn = new Random();
+	static double selLen = 100000;
 
-	public Population ChangePop ( Scenario scenario, double carOwnership ) {
+	public static Population ChangePop ( Scenario scenario, double carOwnership ) {
 		Population population = scenario.getPopulation();
 		// Population populationChange = scenario.getPopulation();
 		// carOwnership = this.carOwnership;
@@ -24,12 +24,12 @@ public class ChangePopulation {
 
 		for(Person person : population.getPersons().values()) {
 			if (person.getAttributes().getAttribute("carAvail")=="never")
-			{person.getAttributes().putAttribute("carOwn", false);}
+			{person.getAttributes().putAttribute("carOwn", "false");}
 			else if (person.getAttributes().getAttribute("carAvail")=="always")
-			{person.getAttributes().putAttribute("carOwn", true);}
+			{person.getAttributes().putAttribute("carOwn", "true");}
 			else 
 			{ // sometimes available
-				int selOwn = rndOwn.nextInt(selLen);
+				double selOwn = rndOwn.nextDouble(selLen);
 				double decOwn = selOwn/selLen;
 				if (decOwn < 0.5) 	{person.getAttributes().putAttribute("carOwn", "true");}
 				else 			{person.getAttributes().putAttribute("carOwn", "false");}
