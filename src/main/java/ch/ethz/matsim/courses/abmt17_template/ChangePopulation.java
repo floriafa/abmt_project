@@ -12,13 +12,14 @@ import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.population.io.PopulationWriter;
 
 public class ChangePopulation {
-	Random rnd = new Random();
-	Random rndOwn = new Random();
-	Random rndAV = new Random();
-	int selLen = 100000;
-	private double origCO = 50; // We assume an original car ownership of 50
 
-	public Population ChangePop ( Scenario scenario, double carOwnership ) {
+	static Random rnd = new Random();
+	static Random rndOwn = new Random();
+	static Random rndAV = new Random();
+	static private double origCO = 50; // We assume an original car ownership of 50
+
+
+	public static Population ChangePop ( Scenario scenario, double carOwnership ) {
 		Population population = scenario.getPopulation();
 		// Population populationChange = scenario.getPopulation();
 		// carOwnership = this.carOwnership;
@@ -26,23 +27,21 @@ public class ChangePopulation {
 
 		for(Person person : population.getPersons().values()) {
 			if (person.getAttributes().getAttribute("carAvail")=="never")
-			{person.getAttributes().putAttribute("carOwn", false);}
+			{person.getAttributes().putAttribute("carOwn", "false");}
 			else if (person.getAttributes().getAttribute("carAvail")=="always")
 			{person.getAttributes().putAttribute("carOwn", "true");}
 			else 
 			{ // sometimes available
-				int selOwn = rndOwn.nextInt(selLen);
-				double decOwn = selOwn/selLen;
-				if (decOwn < 0.5) 	{person.getAttributes().putAttribute("carOwn", "true");}
+				double selOwn = rndOwn.nextDouble();
+				if (selOwn < 0.5) 	{person.getAttributes().putAttribute("carOwn", "true");}
 				else 			{person.getAttributes().putAttribute("carOwn", "false");}}
 
 			// Now for those who still own a car, we alter their car ownership.
 			if (person.getAttributes().getAttribute("carOwn")=="true")
 			{
 				double carToAV = origCO  - carOwnership; // here 50 is the assumed original condition
-				int selAV = rndAV.nextInt(selLen);
-				double decAV = selAV/selLen;
-				if (decAV < carToAV/origCO) {
+				double selAV = rndAV.nextDouble();
+				if (selAV < carToAV/origCO) {
 					person.getAttributes().putAttribute("carOwn","true");
 				}
 			}
@@ -63,10 +62,9 @@ public class ChangePopulation {
 						// here we could do analysis how many trips there are etc.
 					} else if (person.getAttributes().getAttribute("carOwn")== "false" &
 							leg.getMode() == "car") { 
-						int sel = rnd.nextInt(selLen);
-						double dec = sel/selLen;
-						if (dec < 0.63) { leg.setMode("av");}
-						else if (dec <0.98) {leg.setMode("pt");}
+						double sel = rnd.nextDouble();
+						if (sel < 0.63) { leg.setMode("av");}
+						else if (sel <0.98) {leg.setMode("pt");}
 						else {leg.setMode("bike");}
 
 						// Assign rand() to each person and set Mode according to the rand value
@@ -75,10 +73,9 @@ public class ChangePopulation {
 						// Our survey was only for work-/educ.-related trips.
 					} else if (person.getAttributes().getAttribute("carOwn")=="false" & 
 							leg.getMode() == "pt") {
-						int sel = rnd.nextInt(selLen);
-						double dec = sel/selLen;
-						if (dec < 0.63) { leg.setMode("av");}
-						else if (dec < 0.98) {leg.setMode("pt");}
+						double sel = rnd.nextDouble();
+						if (sel < 0.63) { leg.setMode("av");}
+						else if (sel < 0.98) {leg.setMode("pt");}
 						else {leg.setMode("bike");}
 						// Assume those owning car will remain unchanged
 						// Assign rand() to each person and set Mode according to the rand value

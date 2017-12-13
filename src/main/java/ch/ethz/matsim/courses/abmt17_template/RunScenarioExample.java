@@ -57,13 +57,15 @@ public class RunScenarioExample {
 				config.controler().setOutputDirectory(polyboxDirectory + "output/" + avFleet + "/" + carOwnership + "/");
 				config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
 				config.controler().setWriteEventsInterval(1);
+				
+				
 
 				Scenario scenario = ScenarioUtils.loadScenario(config);
 				// Load scenario
 				Controler controler = new Controler(scenario); // Set up simulation controller
 				
 				//Change population here
-				
+				ChangePopulation.ChangePop(scenario, carOwnership);
 
 				// Some additional modules to create a more realistic simulation
 				controler.addOverridingModule(new ABMTScoringModule()); // Required if scoring of activities is used
