@@ -19,7 +19,7 @@ public class ChangePopulation {
 	static private double origCO = 50; // We assume an original car ownership of 50
 
 
-	public static Population ChangePop ( Scenario scenario, double carOwnership ) {
+	public static Population ChangePop ( Scenario scenario, double carOwnership ) { // Should this be population, or is it void?
 		Population population = scenario.getPopulation();
 		// Population populationChange = scenario.getPopulation();
 		// carOwnership = this.carOwnership;
@@ -67,7 +67,7 @@ public class ChangePopulation {
 						else if (sel <0.98) {leg.setMode("pt");}
 						else {leg.setMode("bike");}
 
-						// Assign rand() to each person and set Mode according to the rand value
+						// generate rand() and set Mode according to the rand value
 						// rand values are 0-0.63 AV, 0.63-0.98 PT, 0.98-1.00 Bike
 						// Should all these values only be applied by Trip purpose?
 						// Our survey was only for work-/educ.-related trips.
@@ -78,7 +78,7 @@ public class ChangePopulation {
 						else if (sel < 0.98) {leg.setMode("pt");}
 						else {leg.setMode("bike");}
 						// Assume those owning car will remain unchanged
-						// Assign rand() to each person and set Mode according to the rand value
+						// generate rand() and set Mode according to the rand value
 						// rand values are 0-0.63 AV, 0.63-0.98 PT, 0.98-1.00 Bike
 						// Should all these values only be applied by Trip purpose?
 						// Our survey was only for work-/educ.-related trips.
