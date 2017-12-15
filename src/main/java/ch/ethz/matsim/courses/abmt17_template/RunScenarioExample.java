@@ -22,6 +22,8 @@ import abmt17.scoring.ABMTScoringModule;
 import ch.ethz.matsim.av.framework.AVConfigGroup;
 import ch.ethz.matsim.av.framework.AVModule;
 import ch.ethz.matsim.av.framework.AVQSimProvider;
+import ch.ethz.matsim.av.routing.AVRoute;
+import ch.ethz.matsim.av.routing.AVRouteFactory;
 import ch.ethz.matsim.baseline_scenario.analysis.simulation.ModeShareListenerModule;
 
 /**
@@ -45,18 +47,18 @@ public class RunScenarioExample {
 		// Load the config file (command line argument)
 		String polyboxDirectory = "/home/floriafa/ABMT_project/";
 		int avFleet;
-		double carOwnership = 10;
+		double carOwnership = 50;
 
-		while(carOwnership > -1) {
+		while(carOwnership > 49) {
 			
-			avFleet = 10;
+			avFleet = 200;
 
-			while(avFleet < 21) {
+			while(avFleet < 201) {
 				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
-				config.controler().setLastIteration(1);
+				config.controler().setLastIteration(100);
 				config.controler().setOutputDirectory(polyboxDirectory + "output/" + avFleet + "/" + carOwnership + "/");
 				config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
-				config.controler().setWriteEventsInterval(1);
+				config.controler().setWriteEventsInterval(10);
 				
 				
 
@@ -66,6 +68,7 @@ public class RunScenarioExample {
 				
 				//Change population here
 				ChangePopulation.ChangePop(scenario, carOwnership);
+				scenario.getPopulation().getFactory().getRouteFactories().setRouteFactory(AVRoute.class, new AVRouteFactory()); 
 
 				// Some additional modules to create a more realistic simulation
 				controler.addOverridingModule(new ABMTScoringModule()); // Required if scoring of activities is used
@@ -82,7 +85,7 @@ public class RunScenarioExample {
 
 				controler.run();
 
-				avFleet = avFleet + 10;
+				avFleet = avFleet + 20;
 			}
 			carOwnership = carOwnership - 10;
 		}
