@@ -57,6 +57,7 @@ public class ChangePopulation {
 					Activity activity = (Activity) pe;
 				} else {
 					Leg leg = (Leg) pe;
+					leg.setRoute(null);
 					if (person.getAttributes().getAttribute("carOwn")== "true" &
 							leg.getMode() == "car") { 
 						// we do nothing
@@ -93,8 +94,8 @@ public class ChangePopulation {
 
 		} // % For person
 
-		PopulationWriter pw = new PopulationWriter (population);
-		pw.write("/home/floriafa/ABMT_project/output/pop"+carOwnership+"car.txt");
+//		PopulationWriter pw = new PopulationWriter (population);
+//		pw.write("/home/floriafa/ABMT_project/output/pop"+carOwnership+"car.txt");
 		return population;
 	}	// % Method
 

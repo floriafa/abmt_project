@@ -43,7 +43,9 @@ import ch.ethz.matsim.baseline_scenario.analysis.simulation.ModeShareListenerMod
 public class RunScenarioExample {
 	static public void main(String[] args) {
 		// Load the config file (command line argument)
-		String polyboxDirectory = "/home/floriafa/ABMT_project/";
+//		String polyboxDirectory = "/home/floriafa/ABMT_project/";
+		String polyboxDirectory = "C:/Users/ADMIN/Documents/AAA_Documents/ABMT_project/";
+		
 		int avFleet;
 		double carOwnership = 10;
 
