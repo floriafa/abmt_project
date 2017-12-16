@@ -22,6 +22,8 @@ import abmt17.scoring.ABMTScoringModule;
 import ch.ethz.matsim.av.framework.AVConfigGroup;
 import ch.ethz.matsim.av.framework.AVModule;
 import ch.ethz.matsim.av.framework.AVQSimProvider;
+import ch.ethz.matsim.av.routing.AVRoute;
+import ch.ethz.matsim.av.routing.AVRouteFactory;
 import ch.ethz.matsim.baseline_scenario.analysis.simulation.ModeShareListenerModule;
 
 /**
@@ -43,15 +45,15 @@ import ch.ethz.matsim.baseline_scenario.analysis.simulation.ModeShareListenerMod
 public class RunScenarioExample {
 	static public void main(String[] args) {
 		// Load the config file (command line argument)
-//		String polyboxDirectory = "/home/floriafa/ABMT_project/";
+		//		String polyboxDirectory = "/home/floriafa/ABMT_project/";
 		String polyboxDirectory = "C:/Users/ADMIN/Documents/AAA_Documents/ABMT_project/";
-		
+
 		int avFleet;
 		double carOwnership = 10;
 		int iter = 100;
 
 		while(carOwnership > -1) {
-			
+
 			avFleet = 10;
 
 			while(avFleet < 21) {
@@ -60,15 +62,32 @@ public class RunScenarioExample {
 				config.controler().setOutputDirectory(polyboxDirectory + "output/" + avFleet + "/" + carOwnership + "/");
 				config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
 				config.controler().setWriteEventsInterval(1);
-				
-				
+
+
 
 				Scenario scenario = ScenarioUtils.loadScenario(config);
 				// Load scenario
 				Controler controler = new Controler(scenario); // Set up simulation controller
-				
+
 				//Change population here
-				ChangePopulation.ChangePop(scenario, carOwnership);
+				//				ChangePopulation.ChangePop(scenario, carOwnership);
+
+				scenario.getPopulation().getFactory().getRouteFactories().setRouteFactory(AVRoute.class,
+						new AVRouteFactory());
+
+				// Try to delete all routes
+				for(Person person : scenario.getPopulation().getPersons().values()) {
+					Plan plan = person.getSelectedPlan();
+					for( PlanElement pe : plan.getPlanElements()) {
+						if( pe instanceof Activity) {
+							Activity activity = (Activity) pe;
+						} else {
+							Leg leg = (Leg) pe;
+							leg.setRoute(null);
+						}
+					}
+				}
+
 
 				// Some additional modules to create a more realistic simulation
 				controler.addOverridingModule(new ABMTScoringModule()); // Required if scoring of activities is used
