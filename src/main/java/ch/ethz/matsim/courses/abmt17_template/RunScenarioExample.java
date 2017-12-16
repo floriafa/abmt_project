@@ -48,6 +48,7 @@ public class RunScenarioExample {
 		
 		int avFleet;
 		double carOwnership = 10;
+		int iter = 100;
 
 		while(carOwnership > -1) {
 			
@@ -55,7 +56,7 @@ public class RunScenarioExample {
 
 			while(avFleet < 21) {
 				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
-				config.controler().setLastIteration(1);
+				config.controler().setLastIteration(iter);
 				config.controler().setOutputDirectory(polyboxDirectory + "output/" + avFleet + "/" + carOwnership + "/");
 				config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
 				config.controler().setWriteEventsInterval(1);
