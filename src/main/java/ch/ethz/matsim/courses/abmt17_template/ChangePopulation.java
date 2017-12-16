@@ -45,6 +45,9 @@ public class ChangePopulation {
 					person.getAttributes().putAttribute("carOwn","true");
 				}
 			}
+			// Now set all those who do not have a car to have car availability never.
+			if (person.getAttributes().getAttribute("carOwn")=="false")
+			{person.getAttributes().putAttribute("carAvail", "never");}
 
 			// now based on their ownership, we set the mode choice
 
