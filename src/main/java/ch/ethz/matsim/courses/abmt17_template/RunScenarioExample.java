@@ -49,27 +49,28 @@ public class RunScenarioExample {
 		String polyboxDirectory = "C:/Users/ADMIN/Documents/AAA_Documents/ABMT_project/";
 
 		int avFleet;
-		double carOwnership = 10;
+		double carOwnership = 50;
 		int iter = 100;
 
-		while(carOwnership > -1) {
-
-			avFleet = 10;
-
-			while(avFleet < 21) {
+		while(carOwnership > 49) {
+			
+			avFleet = 200;
+			while(avFleet < 201) {
 				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
 				config.controler().setLastIteration(iter);
+
 				config.controler().setOutputDirectory(polyboxDirectory + "output/" + avFleet + "/" + carOwnership + "/");
 				config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
-				config.controler().setWriteEventsInterval(1);
 
-
+				config.controler().setWriteEventsInterval(10);
+				
 
 				Scenario scenario = ScenarioUtils.loadScenario(config);
 				// Load scenario
 				Controler controler = new Controler(scenario); // Set up simulation controller
 
 				//Change population here
+
 				//				ChangePopulation.ChangePop(scenario, carOwnership);
 
 				scenario.getPopulation().getFactory().getRouteFactories().setRouteFactory(AVRoute.class,
@@ -104,7 +105,7 @@ public class RunScenarioExample {
 
 				controler.run();
 
-				avFleet = avFleet + 10;
+				avFleet = avFleet + 20;
 			}
 			carOwnership = carOwnership - 10;
 		}

@@ -44,6 +44,7 @@ public class ChangePopulation {
 				if (selAV < carToAV/origCO) {
 					person.getAttributes().putAttribute("carOwn","true");
 				}
+				
 			}
 			// Now set all those who do not have a car to have car availability never.
 			if (person.getAttributes().getAttribute("carOwn")=="false")
@@ -67,7 +68,7 @@ public class ChangePopulation {
 					} else if (person.getAttributes().getAttribute("carOwn")== "false" &
 							leg.getMode() == "car") { 
 						double sel = rnd.nextDouble();
-						if (sel < 0.63) { leg.setMode("av");}
+						if (sel < 0.63) { leg.setMode("av");} // war 0.63
 						else if (sel <0.98) {leg.setMode("pt");}
 						else {leg.setMode("bike");}
 
@@ -78,7 +79,7 @@ public class ChangePopulation {
 					} else if (person.getAttributes().getAttribute("carOwn")=="false" & 
 							leg.getMode() == "pt") {
 						double sel = rnd.nextDouble();
-						if (sel < 0.63) { leg.setMode("av");}
+						if (sel < 0.63) { leg.setMode("av");} // war 0.63
 						else if (sel < 0.98) {leg.setMode("pt");}
 						else {leg.setMode("bike");}
 						// Assume those owning car will remain unchanged
@@ -90,7 +91,8 @@ public class ChangePopulation {
 
 				}
 				// Do we compile the activities and legs again into pe?
-			} // % For plan
+			}
+			// % For plan
 
 		} // % For person
 
