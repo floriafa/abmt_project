@@ -99,6 +99,6 @@ public class ChangePopulation {
 //		PopulationWriter pw = new PopulationWriter (population);
 //		pw.write("/home/floriafa/ABMT_project/output/pop"+carOwnership+"car.txt");
 		return population;
-	}	// % Method
+	}	// % Method.
 
 } // % Class
