@@ -39,7 +39,7 @@ public class ChangePopulation {
 			// Now for those who still own a car, we alter their car ownership.
 			if (person.getAttributes().getAttribute("carOwn")=="true")
 			{
-				double carToAV = origCO  - carOwnership; // here 50 is the assumed original condition
+				double carToAV = origCO - carOwnership; // here 50 is the assumed original condition
 				double selAV = rndAV.nextDouble();
 				if (selAV < carToAV/origCO) {
 					person.getAttributes().putAttribute("carOwn","true");
