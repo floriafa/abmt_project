@@ -53,7 +53,7 @@ public class RunScenarioExample {
 		int iter = 100;
 
 		while(carOwnership > 49) {
-			
+
 			avFleet = 200;
 			while(avFleet < 201) {
 				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
@@ -63,7 +63,7 @@ public class RunScenarioExample {
 				config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
 
 				config.controler().setWriteEventsInterval(10);
-				
+
 
 				Scenario scenario = ScenarioUtils.loadScenario(config);
 				// Load scenario
@@ -71,23 +71,23 @@ public class RunScenarioExample {
 
 				//Change population here
 
-				//				ChangePopulation.ChangePop(scenario, carOwnership);
+				ChangePopulation.ChangePop(scenario, carOwnership);
 
 				scenario.getPopulation().getFactory().getRouteFactories().setRouteFactory(AVRoute.class,
 						new AVRouteFactory());
 
-				// Try to delete all routes
-				for(Person person : scenario.getPopulation().getPersons().values()) {
-					Plan plan = person.getSelectedPlan();
-					for( PlanElement pe : plan.getPlanElements()) {
-						if( pe instanceof Activity) {
-							Activity activity = (Activity) pe;
-						} else {
-							Leg leg = (Leg) pe;
-							leg.setRoute(null);
-						}
-					}
-				}
+				//				// Try to delete all routes
+				//				for(Person person : scenario.getPopulation().getPersons().values()) {
+				//					Plan plan = person.getSelectedPlan();
+				//					for( PlanElement pe : plan.getPlanElements()) {
+				//						if( pe instanceof Activity) {
+				//							Activity activity = (Activity) pe;
+				//						} else {
+				//							Leg leg = (Leg) pe;
+				//							leg.setRoute(null);
+				//						}
+				//					}
+				//				}
 
 
 				// Some additional modules to create a more realistic simulation
