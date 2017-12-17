@@ -48,14 +48,14 @@ public class RunScenarioExample {
 		//		String polyboxDirectory = "/home/floriafa/ABMT_project/";
 		String polyboxDirectory = "C:/Users/ADMIN/Documents/AAA_Documents/ABMT_project/";
 
-		int avFleet;
-		double carOwnership = 50;
+		int avFleet; // Should be 10, 100, 1000, 10000
+		double carOwnership = 50; // Should be 50, 25, 0
 		int iter = 100;
 
 		while(carOwnership > 49) {
 
-			avFleet = 200;
-			while(avFleet < 201) {
+			avFleet = 10;
+			while(avFleet < 11) {
 				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
 				config.controler().setLastIteration(iter);
 
