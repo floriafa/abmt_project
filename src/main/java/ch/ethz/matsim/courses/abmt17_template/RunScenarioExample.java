@@ -49,13 +49,13 @@ public class RunScenarioExample {
 		String polyboxDirectory = "C:/Users/ADMIN/Documents/AAA_Documents/ABMT_project/";
 
 		int avFleet; // Should be 10, 100, 1000, 10000
-		double carOwnership = 25; // Should be 50, 25, 0
+		double carOwnership = 50; // Should be 50, 25, 0
 		int iter = 100;
 
 		while(carOwnership > -1) {
 
-			avFleet = 10;
-			while(avFleet < 100000) {
+			avFleet = 100;
+			while(avFleet < 10001) {
 				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
 				config.controler().setLastIteration(iter);
 
@@ -82,17 +82,17 @@ public class RunScenarioExample {
 
 
 				// Try to delete all routes
-				for(Person person : scenario.getPopulation().getPersons().values()) { //modPop?
-					Plan plan = person.getSelectedPlan();
-					for( PlanElement pe : plan.getPlanElements()) {
-						if( pe instanceof Activity) {
-							Activity activity = (Activity) pe;
-						} else {
-							Leg leg = (Leg) pe;
-							leg.setRoute(null);
-						}
-					}
-				}
+//				for(Person person : scenario.getPopulation().getPersons().values()) { //modPop?
+//					Plan plan = person.getSelectedPlan();
+//					for( PlanElement pe : plan.getPlanElements()) {
+//						if( pe instanceof Activity) {
+//							Activity activity = (Activity) pe;
+//						} else {
+//							Leg leg = (Leg) pe;
+//							leg.setRoute(null);
+//						}
+//					}
+//				}
 
 				// Some additional modules to create a more realistic simulation
 				controler.addOverridingModule(new ABMTScoringModule()); // Required if scoring of activities is used
@@ -109,9 +109,9 @@ public class RunScenarioExample {
 
 				controler.run();
 
-				avFleet = avFleet + 20;
+				avFleet = avFleet * 10;
 			}
-			carOwnership = carOwnership - 10;
+			carOwnership = carOwnership - 25;
 		}
 	}
 
