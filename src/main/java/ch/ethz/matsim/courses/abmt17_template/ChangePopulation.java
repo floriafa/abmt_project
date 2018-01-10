@@ -42,7 +42,7 @@ public class ChangePopulation {
 				double carToAV = origCO - carOwnership; // here 50 is the assumed original condition
 				double selAV = rndAV.nextDouble();
 				if (selAV < carToAV/origCO) {
-					person.getAttributes().putAttribute("carOwn","true");
+					person.getAttributes().putAttribute("carOwn","false");
 				}
 				
 			}
@@ -102,3 +102,5 @@ public class ChangePopulation {
 	}	// % Method.
 
 } // % Class
+
+

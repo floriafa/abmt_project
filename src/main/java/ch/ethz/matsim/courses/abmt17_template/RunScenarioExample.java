@@ -49,7 +49,7 @@ public class RunScenarioExample {
 		String polyboxDirectory = "C:/Users/ADMIN/Documents/AAA_Documents/ABMT_project/";
 
 		int avFleet; // Should be 10, 100, 1000, 10000
-		double carOwnership = 50; // Should be 50, 25, 0
+		double carOwnership = 25; // Should be 50, 25, 0
 		int iter = 100;
 
 		while(carOwnership > -1) {
