@@ -11,7 +11,7 @@ import org.matsim.api.core.v01.population.PlanElement;
 import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.population.io.PopulationWriter;
 
-public class ChangePopulation {
+public class ChangePopulationModeParams {
 
 	static Random rnd = new Random();
 	static Random rndOwn = new Random();

@@ -42,7 +42,7 @@ import ch.ethz.matsim.baseline_scenario.analysis.simulation.ModeShareListenerMod
  * Furthermore, add the following to VM aruments: -Xmx10G It will tell Java to
  * use up to 10GB of RAM for the simulation.
  */
-public class RunScenarioExample {
+public class RunScenarioExampleWithModeParams {
 	static public void main(String[] args) {
 		// Load the config file (command line argument)
 		//		String polyboxDirectory = "/home/floriafa/ABMT_project/";
@@ -75,7 +75,7 @@ public class RunScenarioExample {
 				//				modPop.getFactory().getRouteFactories().setRouteFactory(AVRoute.class,
 				//						new AVRouteFactory());type name = new type();
 				
-				ChangePopulation.ChangePop(scenario, carOwnership);
+				ChangePopulationModeParams.ChangePop(scenario, carOwnership);
 				scenario.getPopulation().getFactory().getRouteFactories().setRouteFactory(AVRoute.class,
 						new AVRouteFactory());
 
