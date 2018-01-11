@@ -92,6 +92,10 @@ public class RunScenarioExampleWithModeParams {
 						traditional.getPersons().remove(person);
 					}
 				}
+//				PopulationWriter pw1 = new PopulationWriter (carless);
+//				PopulationWriter pw2 = new PopulationWriter (traditional);
+//				pw1.write(polyboxDirectory + "output/carlesspopulation.txt");
+//				pw2.write(polyboxDirectory + "output/traditionalpopulation.txt");
 
 				//				for(Person person : scenario.getPopulation().getPersons().values()) {
 				//					if (person.getAttributes().getAttribute("carOwn")=="true")
