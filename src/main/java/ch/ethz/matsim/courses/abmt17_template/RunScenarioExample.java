@@ -48,18 +48,19 @@ public class RunScenarioExample {
 		//		String polyboxDirectory = "/home/floriafa/ABMT_project/";
 		String polyboxDirectory = "C:/Users/ADMIN/Documents/AAA_Documents/ABMT_project/";
 
-		int avFleet; // Should be 10, 100, 1000, 10000
-		double carOwnership = 25; // Should be 50, 25, 0
+		int avFleet; // Should be 100, 200, 400,800,1600,3200,6400
+		double carOwnership = 100; // Should be 100,75,50, 25, 0. Represents share of current ownership
 		int iter = 100;
+		String modeChoice = "ChoiceOff";
 
 		while(carOwnership > -1) {
 
 			avFleet = 100;
 			while(avFleet < 10001) {
-				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
+				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + modeChoice + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
 				config.controler().setLastIteration(iter);
 
-				config.controler().setOutputDirectory(polyboxDirectory + "output/AV" + avFleet + "/Own" + carOwnership + "/");
+				config.controler().setOutputDirectory(polyboxDirectory + "output"+ "/" + modeChoice +  "/AV" + avFleet + "/Own" + carOwnership + "/" );
 				config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
 
 				config.controler().setWriteEventsInterval(1);
@@ -109,7 +110,7 @@ public class RunScenarioExample {
 
 				controler.run();
 
-				avFleet = avFleet * 10;
+				avFleet = avFleet * 4;
 			}
 			carOwnership = carOwnership - 25;
 		}
