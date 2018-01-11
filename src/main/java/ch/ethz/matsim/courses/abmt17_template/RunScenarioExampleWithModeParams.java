@@ -48,18 +48,19 @@ public class RunScenarioExampleWithModeParams {
 		//		String polyboxDirectory = "/home/floriafa/ABMT_project/";
 		String polyboxDirectory = "C:/Users/ADMIN/Documents/AAA_Documents/ABMT_project/";
 
-		int avFleet; // Should be 10, 100, 1000, 10000
-		double carOwnership = 50; // Should be 50, 25, 0
+		int avFleet; // Starts at 100 and is multiplied by two every cycle until 6400
+		double carOwnership = 100; // Should be 100, 75, 50, 25, 0. Represents share of current ownership
 		int iter = 100;
+		String modeChoice = "ChoiceOn";
 
 		while(carOwnership > -1) {
 
-			avFleet = 100;
-			while(avFleet < 10001) {
-				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
+			avFleet = 200;
+			while(avFleet < 6401) {
+				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + modeChoice + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
 				config.controler().setLastIteration(iter);
 
-				config.controler().setOutputDirectory(polyboxDirectory + "output/AV" + avFleet + "/Own" + carOwnership + "/");
+				config.controler().setOutputDirectory(polyboxDirectory + "output"+ "/" + modeChoice +  "/AV" + avFleet + "/Own" + carOwnership + "/" );
 				config.controler().setOverwriteFileSetting( OverwriteFileSetting.deleteDirectoryIfExists );
 
 				config.controler().setWriteEventsInterval(1);
@@ -70,29 +71,26 @@ public class RunScenarioExampleWithModeParams {
 				Controler controler = new Controler(scenario); // Set up simulation controller
 
 				//Change population here
-
-				// Population modPop = ChangePopulation.ChangePop(scenario, carOwnership);
-				//				modPop.getFactory().getRouteFactories().setRouteFactory(AVRoute.class,
-				//						new AVRouteFactory());type name = new type();
 				
 				ChangePopulationModeParams.ChangePop(scenario, carOwnership);
-				scenario.getPopulation().getFactory().getRouteFactories().setRouteFactory(AVRoute.class,
-						new AVRouteFactory());
+				
+				// We create subPopulations
 
+				Population carless = scenario.getPopulation();
+				Population traditional = scenario.getPopulation();
+				
+				for(Person person : carless.getPersons().values()) {
+					if (person.getAttributes().getAttribute("carOwn")=="true")
+					{carless.removePerson(person.getId());}
+				}
+				for(Person person : traditional.getPersons().values()) {
+					if (person.getAttributes().getAttribute("carOwn")=="false")
+					{traditional.removePerson(person.getId());}
+				}
 
-
-				// Try to delete all routes
-//				for(Person person : scenario.getPopulation().getPersons().values()) { //modPop?
-//					Plan plan = person.getSelectedPlan();
-//					for( PlanElement pe : plan.getPlanElements()) {
-//						if( pe instanceof Activity) {
-//							Activity activity = (Activity) pe;
-//						} else {
-//							Leg leg = (Leg) pe;
-//							leg.setRoute(null);
-//						}
-//					}
-//				}
+					
+					scenario.getPopulation().getFactory().getRouteFactories().setRouteFactory(AVRoute.class,
+							new AVRouteFactory());
 
 				// Some additional modules to create a more realistic simulation
 				controler.addOverridingModule(new ABMTScoringModule()); // Required if scoring of activities is used
@@ -109,7 +107,7 @@ public class RunScenarioExampleWithModeParams {
 
 				controler.run();
 
-				avFleet = avFleet * 10;
+				avFleet = avFleet * 2;
 			}
 			carOwnership = carOwnership - 25;
 		}

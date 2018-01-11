@@ -39,9 +39,8 @@ public class ChangePopulationModeParams {
 			{
 				double carToAV = origCO - carOwnership;
 				double selAV = rndAV.nextDouble();
-				if (selAV < carToAV/origCO) {
-					person.getAttributes().putAttribute("carOwn","true"); // do we need to do anything here to make sure mode share changes?
-				}
+				double ratio = carToAV/origCO;
+				if (selAV < ratio) {person.getAttributes().putAttribute("carOwn","false");}
 				
 			}
 			// Now set all those who do not have a car to have car availability never.
@@ -57,6 +56,8 @@ public class ChangePopulationModeParams {
 				} else {
 					Leg leg = (Leg) pe;
 					leg.setRoute(null);
+
+					
 					if (person.getAttributes().getAttribute("carOwn")== "true" &
 							leg.getMode() == "car") { 
 						// we do nothing
@@ -67,8 +68,8 @@ public class ChangePopulationModeParams {
 							leg.getMode() == "car") { 
 						double sel = rnd.nextDouble();
 						if (sel < 0.63) { leg.setMode("av");} // war 0.63
-						else if (sel <0.98) {leg.setMode("pt");}
-						else {leg.setMode("bike");}
+						else if (sel <0.98) {leg.setMode("ptNC");}
+						else {leg.setMode("bikeNC");}
 
 						// generate rand() and set Mode according to the rand value
 						// rand values are 0-0.63 AV, 0.63-0.98 PT, 0.98-1.00 Bike
@@ -78,13 +79,17 @@ public class ChangePopulationModeParams {
 							leg.getMode() == "pt") {
 						double sel = rnd.nextDouble();
 						if (sel < 0.63) { leg.setMode("av");} // war 0.63
-						else if (sel < 0.98) {leg.setMode("pt");}
-						else {leg.setMode("bike");}
+						else if (sel < 0.98) {leg.setMode("ptNC");}
+						else {leg.setMode("bikeNC");}
 						// Assume those owning car will remain unchanged
 						// generate rand() and set Mode according to the rand value
 						// rand values are 0-0.63 AV, 0.63-0.98 PT, 0.98-1.00 Bike
 						// Should all these values only be applied by Trip purpose?
 						// Our survey was only for work-/educ.-related trips.
+					}
+					if (person.getAttributes().getAttribute("carOwn")== "false") //change all modes for carless pop except for car and pt, which have been changed above
+					{if(leg.getMode() == "bike") {leg.setMode("bikeNC");}
+					else if(leg.getMode() == "walk") {leg.setMode("walkNC");}
 					}
 
 				}
@@ -93,6 +98,7 @@ public class ChangePopulationModeParams {
 			// % For plan
 
 		} // % For person
+		
 
 //		PopulationWriter pw = new PopulationWriter (population);
 //		pw.write("/home/floriafa/ABMT_project/output/pop"+carOwnership+"car.txt");
