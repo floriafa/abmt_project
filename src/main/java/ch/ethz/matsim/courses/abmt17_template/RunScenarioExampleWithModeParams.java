@@ -1,5 +1,9 @@
 package ch.ethz.matsim.courses.abmt17_template;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.population.Activity;
 import org.matsim.api.core.v01.population.Leg;
@@ -53,6 +57,7 @@ public class RunScenarioExampleWithModeParams {
 		int iter = 100;
 		String modeChoice = "ChoiceOn";
 
+
 		while(carOwnership > -1) {
 
 			avFleet = 200;
@@ -71,26 +76,64 @@ public class RunScenarioExampleWithModeParams {
 				Controler controler = new Controler(scenario); // Set up simulation controller
 
 				//Change population here
-				
+
 				ChangePopulationModeParams.ChangePop(scenario, carOwnership);
-				
-				// We create subPopulations
+
+				// We create subPopulations		
 
 				Population carless = scenario.getPopulation();
 				Population traditional = scenario.getPopulation();
-				
-				for(Person person : carless.getPersons().values()) {
-					if (person.getAttributes().getAttribute("carOwn")=="true")
-					{carless.removePerson(person.getId());}
-				}
-				for(Person person : traditional.getPersons().values()) {
-					if (person.getAttributes().getAttribute("carOwn")=="false")
-					{traditional.removePerson(person.getId());}
+				for(Person person : scenario.getPopulation().getPersons().values())
+				{
+					Id<Person> personId = person.getId();
+					if(person.getAttributes().getAttribute("carOwn")=="true"){
+						carless.getPersons().remove(person);
+					} else if (person.getAttributes().getAttribute("carOwn")=="false") {
+						traditional.getPersons().remove(person);
+					}
 				}
 
-					
-					scenario.getPopulation().getFactory().getRouteFactories().setRouteFactory(AVRoute.class,
-							new AVRouteFactory());
+				//				for(Person person : scenario.getPopulation().getPersons().values()) {
+				//					if (person.getAttributes().getAttribute("carOwn")=="true")
+				//					{
+				//						traditional.getFactory().createPerson(person.getId());
+				//						traditional.getPersons().get(person.getId()).setSelectedPlan(person.getSelectedPlan());
+				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("age", person.getAttributes().getAttribute("age"));
+				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("carAvail", person.getAttributes().getAttribute("carAvail"));
+				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("carOwn", person.getAttributes().getAttribute("carOwn"));
+				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("employed", person.getAttributes().getAttribute("employed"));
+				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("hasLicense", person.getAttributes().getAttribute("hasLicense"));
+				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("sex", person.getAttributes().getAttribute("sex"));
+				//					}
+				//					else if (person.getAttributes().getAttribute("carOwn")=="false")
+				//					{
+				//						carless.getFactory().createPerson(person.getId());
+				//						carless.getPersons().get(person.getId()).setSelectedPlan(person.getSelectedPlan());
+				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("age", person.getAttributes().getAttribute("age"));
+				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("carAvail", person.getAttributes().getAttribute("carAvail"));
+				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("carOwn", person.getAttributes().getAttribute("carOwn"));
+				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("employed", person.getAttributes().getAttribute("employed"));
+				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("hasLicense", person.getAttributes().getAttribute("hasLicense"));
+				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("sex", person.getAttributes().getAttribute("sex"));
+				//					}
+				//				}
+
+				//				Population carless = scenario.getPopulation();
+				//				Population traditional = scenario.getPopulation();
+
+
+
+				//				for(Person person : carless.getPersons().values()) {
+				//					if (person.getAttributes().getAttribute("carOwn")=="true")
+				//					{carless.removePerson(person.getId());}
+				//				}
+				//				for(Person person : traditional.getPersons().values()) {
+				//					if (person.getAttributes().getAttribute("carOwn")=="false")
+				//					{traditional.removePerson(person.getId());}
+				//				}
+
+				scenario.getPopulation().getFactory().getRouteFactories().setRouteFactory(AVRoute.class,
+						new AVRouteFactory());
 
 				// Some additional modules to create a more realistic simulation
 				controler.addOverridingModule(new ABMTScoringModule()); // Required if scoring of activities is used
