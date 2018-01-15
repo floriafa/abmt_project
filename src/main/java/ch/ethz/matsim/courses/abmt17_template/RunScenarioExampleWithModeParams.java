@@ -19,6 +19,7 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting;
+import org.matsim.core.population.PopulationUtils;
 import org.matsim.core.population.io.PopulationWriter;
 import org.matsim.core.replanning.modules.SubtourModeChoice;
 import org.matsim.core.scenario.ScenarioUtils;
@@ -62,7 +63,7 @@ public class RunScenarioExampleWithModeParams {
 
 		while(carOwnership > -1) {
 
-			avFleet = 200;
+			avFleet = 100;
 			while(avFleet < 6401) {
 				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + modeChoice + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
 				config.controler().setLastIteration(iter);
@@ -83,49 +84,57 @@ public class RunScenarioExampleWithModeParams {
 
 				// We create subPopulations		
 
-				Population carless = scenario.getPopulation();
-				Population traditional = scenario.getPopulation();
-				for(Person person : scenario.getPopulation().getPersons().values())
-				{
-					Id<Person> personId = person.getId();
-					if(person.getAttributes().getAttribute("carOwn")=="true"){
-						carless.getPersons().remove(person);
-					} else if (person.getAttributes().getAttribute("carOwn")=="false") {
-						traditional.getPersons().remove(person);
-					}
-				}
-//				PopulationWriter pw1 = new PopulationWriter (carless);
-//				PopulationWriter pw2 = new PopulationWriter (traditional);
-//				pw1.write(polyboxDirectory + "output/carlesspopulation.txt");
-//				pw2.write(polyboxDirectory + "output/traditionalpopulation.txt");
+				Population population = scenario.getPopulation();
 
-				//				for(Person person : scenario.getPopulation().getPersons().values()) {
-				//					if (person.getAttributes().getAttribute("carOwn")=="true")
-				//					{
-				//						traditional.getFactory().createPerson(person.getId());
-				//						traditional.getPersons().get(person.getId()).setSelectedPlan(person.getSelectedPlan());
-				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("age", person.getAttributes().getAttribute("age"));
-				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("carAvail", person.getAttributes().getAttribute("carAvail"));
-				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("carOwn", person.getAttributes().getAttribute("carOwn"));
-				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("employed", person.getAttributes().getAttribute("employed"));
-				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("hasLicense", person.getAttributes().getAttribute("hasLicense"));
-				//						traditional.getPersons().get(person.getId()).getCustomAttributes().put("sex", person.getAttributes().getAttribute("sex"));
-				//					}
-				//					else if (person.getAttributes().getAttribute("carOwn")=="false")
-				//					{
-				//						carless.getFactory().createPerson(person.getId());
-				//						carless.getPersons().get(person.getId()).setSelectedPlan(person.getSelectedPlan());
-				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("age", person.getAttributes().getAttribute("age"));
-				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("carAvail", person.getAttributes().getAttribute("carAvail"));
-				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("carOwn", person.getAttributes().getAttribute("carOwn"));
-				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("employed", person.getAttributes().getAttribute("employed"));
-				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("hasLicense", person.getAttributes().getAttribute("hasLicense"));
-				//						carless.getPersons().get(person.getId()).getCustomAttributes().put("sex", person.getAttributes().getAttribute("sex"));
+
+//				Population carless = scenario.getPopulation();
+//				Population traditional = scenario.getPopulation();
+				//				for(Person person : scenario.getPopulation().getPersons().values())
+				//				{
+				//					Id<Person> personId = person.getId();
+				//					if(person.getAttributes().getAttribute("carOwn")=="true"){
+				//						carless.getPersons().remove(person);
+				//					} else if (person.getAttributes().getAttribute("carOwn")=="false") {
+				//						traditional.getPersons().remove(person);
 				//					}
 				//				}
+				//				PopulationWriter pw1 = new PopulationWriter (carless);
+				//				PopulationWriter pw2 = new PopulationWriter (traditional);
+				//				pw1.write(polyboxDirectory + "output/carlesspopulation.txt");
+				//				pw2.write(polyboxDirectory + "output/traditionalpopulation.txt");
 
-				//				Population carless = scenario.getPopulation();
-				//				Population traditional = scenario.getPopulation();
+				Population carless = PopulationUtils.createPopulation(config);
+				Population traditional = PopulationUtils.createPopulation(config);
+				for(Person person : population.getPersons().values()) {
+					if (person.getAttributes().getAttribute("carOwn")=="true")
+					{
+						traditional.getFactory().createPerson(person.getId());
+						traditional.getPersons().get(person.getId()).setSelectedPlan(person.getSelectedPlan());
+						traditional.getPersons().get(person.getId()).getCustomAttributes().put("age", person.getAttributes().getAttribute("age"));
+						traditional.getPersons().get(person.getId()).getCustomAttributes().put("carAvail", person.getAttributes().getAttribute("carAvail"));
+						traditional.getPersons().get(person.getId()).getCustomAttributes().put("carOwn", person.getAttributes().getAttribute("carOwn"));
+						traditional.getPersons().get(person.getId()).getCustomAttributes().put("employed", person.getAttributes().getAttribute("employed"));
+						traditional.getPersons().get(person.getId()).getCustomAttributes().put("hasLicense", person.getAttributes().getAttribute("hasLicense"));
+						traditional.getPersons().get(person.getId()).getCustomAttributes().put("sex", person.getAttributes().getAttribute("sex"));
+					}
+					else if (person.getAttributes().getAttribute("carOwn")=="false")
+					{
+						carless.getFactory().createPerson(person.getId());
+						carless.getPersons().get(person.getId()).setSelectedPlan(person.getSelectedPlan());
+						carless.getPersons().get(person.getId()).getCustomAttributes().put("age", person.getAttributes().getAttribute("age"));
+						carless.getPersons().get(person.getId()).getCustomAttributes().put("carAvail", person.getAttributes().getAttribute("carAvail"));
+						carless.getPersons().get(person.getId()).getCustomAttributes().put("carOwn", person.getAttributes().getAttribute("carOwn"));
+						carless.getPersons().get(person.getId()).getCustomAttributes().put("employed", person.getAttributes().getAttribute("employed"));
+						carless.getPersons().get(person.getId()).getCustomAttributes().put("hasLicense", person.getAttributes().getAttribute("hasLicense"));
+						carless.getPersons().get(person.getId()).getCustomAttributes().put("sex", person.getAttributes().getAttribute("sex"));
+					}
+				}
+
+								PopulationWriter pw1 = new PopulationWriter (carless);
+								PopulationWriter pw2 = new PopulationWriter (traditional);
+								pw1.write(polyboxDirectory + "output/carlesspopulation.txt");
+								pw2.write(polyboxDirectory + "output/traditionalpopulation.txt");
+
 
 
 

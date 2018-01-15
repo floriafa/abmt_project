@@ -49,14 +49,14 @@ public class RunScenarioExample {
 		String polyboxDirectory = "C:/Users/ADMIN/Documents/AAA_Documents/ABMT_project/";
 
 		int avFleet; // Should be 100, 200, 400,800,1600,3200,6400
-		double carOwnership = 100; // Should be 100,75,50, 25, 0. Represents share of current ownership
+		double carOwnership = 100; // Should be 100. 100,75,50, 25, 0. Represents share of current ownership
 		int iter = 100;
 		String modeChoice = "ChoiceOff";
 
 		while(carOwnership > -1) {
 
 			avFleet = 100;
-			while(avFleet < 10001) {
+			while(avFleet < 101) {
 				Config config = ConfigUtils.loadConfig(polyboxDirectory +"scenario/abmt_config" + modeChoice + avFleet + ".xml", new DvrpConfigGroup(), new AVConfigGroup());
 				config.controler().setLastIteration(iter);
 
@@ -110,7 +110,7 @@ public class RunScenarioExample {
 
 				controler.run();
 
-				avFleet = avFleet * 4;
+				avFleet = avFleet * 2;
 			}
 			carOwnership = carOwnership - 25;
 		}
