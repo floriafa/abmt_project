@@ -16,7 +16,7 @@ public class ChangePopulation {
 	static Random rnd = new Random();
 	static Random rndOwn = new Random();
 	static Random rndAV = new Random();
-	static private double origCO = 50; // We assume an original car ownership of 50
+	static private double origCO = 100; // We assume an original car ownership of 100
 
 
 	public static Population ChangePop ( Scenario scenario, double carOwnership ) { // Should this be population, or is it void?
